@@ -1,0 +1,62 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.35.1.
+--
+-- see: https://github.com/sol/hpack
+
+name:           protolite
+version:        0.1.0.0
+synopsis:       Lightweight generic protobuf en/decoder implementation.
+description:    Please see the README on GitHub at <https://github.com/Qiu233/protolite#readme>
+category:       Data
+homepage:       https://github.com/Qiu233/protolite#readme
+bug-reports:    https://github.com/Qiu233/protolite/issues
+author:         Qiu
+maintainer:     lopi258@outlook.com
+copyright:      2023 Qiu
+license:        MIT
+license-file:   LICENSE
+build-type:     Simple
+extra-source-files:
+    README.md
+
+source-repository head
+  type: git
+  location: https://github.com/Qiu233/protolite
+
+library
+  exposed-modules:
+      ProtoLite
+  other-modules:
+      ProtoLite.Decode
+      ProtoLite.Encode
+      ProtoLite.Generic
+      ProtoLite.Types
+      Paths_protolite
+  hs-source-dirs:
+      src
+  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints
+  build-depends:
+      base >=4.7 && <5
+    , binary
+    , bytestring
+    , utf8-string
+  default-language: Haskell2010
+
+test-suite protolite-test
+  type: exitcode-stdio-1.0
+  main-is: Spec.hs
+  other-modules:
+      Paths_protolite
+  hs-source-dirs:
+      test
+  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      base >=4.7 && <5
+    , binary
+    , bytestring
+    , hspec
+    , hspec-expectations
+    , protolite
+    , utf8-string
+  default-language: Haskell2010
