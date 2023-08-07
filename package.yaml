@@ -1,0 +1,56 @@
+name:                protolite
+version:             0.1.0.0
+github:              "Qiu233/protolite"
+license:             MIT
+author:              "Qiu"
+maintainer:          "lopi258@outlook.com"
+copyright:           "2023 Qiu"
+
+extra-source-files:
+- README.md
+
+# Metadata used when publishing your package
+synopsis:            Lightweight generic protobuf en/decoder implementation.
+category: Data
+
+# To avoid duplicated efforts in documentation and dealing with the
+# complications of embedding Haddock markup inside cabal files, it is
+# common to point users to the README.md file.
+description:         Please see the README on GitHub at <https://github.com/Qiu233/protolite#readme>
+
+pvp-bounds: both
+
+dependencies:
+- base >= 4.7 && < 5
+- bytestring
+- binary
+- utf8-string
+
+ghc-options:
+- -Wall
+- -Wcompat
+- -Widentities
+- -Wincomplete-record-updates
+- -Wincomplete-uni-patterns
+- -Wmissing-export-lists
+- -Wmissing-home-modules
+- -Wpartial-fields
+- -Wredundant-constraints
+
+library:
+  source-dirs: src
+  exposed-modules:
+    - ProtoLite
+
+tests:
+  protolite-test:
+    main:                Spec.hs
+    source-dirs:         test
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - protolite
+    - hspec
+    - hspec-expectations
