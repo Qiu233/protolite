@@ -10,7 +10,7 @@
 {-# LANGUAGE LambdaCase #-}
 module ProtoLite.Generic (
     Optional, Repeated(..), Packed(..), Variant(..), SInt32(..), SInt64(..),
-    ProtoField(..), ProtoBuf, encode, decode
+    ProtoField(..), ProtoBuf, encode, decode, optionalOrDefault
 ) where
 import GHC.Generics
 import ProtoLite.Types
