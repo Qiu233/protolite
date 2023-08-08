@@ -1,5 +1,6 @@
 {-# LANGUAGE DataKinds #-}
 {-# LANGUAGE DeriveGeneric #-}
+{-# LANGUAGE OverloadedRecordDot #-}
 import Test.Hspec
 import ProtoLite
 import Data.Word
@@ -146,6 +147,7 @@ main = hspec $ do
             print v
             printHex bs
             print v'
+            print $ v.optfu32.protoOptDef
             v' `shouldBe` v
         it "list" $ do
             let v = ProtoListTest {

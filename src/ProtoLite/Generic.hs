@@ -8,6 +8,7 @@
 {-# LANGUAGE TypeFamilies #-}
 {-# LANGUAGE UndecidableInstances #-}
 {-# LANGUAGE LambdaCase #-}
+{-# LANGUAGE DataKinds #-}
 module ProtoLite.Generic (
     Optional, Repeated(..), Packed(..), Variant(..), SInt32(..), SInt64(..),
     ProtoField(..), ProtoBuf, encode, decode, optionalOrDefault
@@ -30,6 +31,7 @@ import Data.Binary.Put (runPut, putWord32le, putWord64le, putInt32le, putInt64le
 import Data.ByteString.Lazy.UTF8 (toString)
 import Data.Binary.Get (runGet, isEmpty, getWord32le, getWord64le, getInt32le, getInt64le, getFloatle, getDoublele)
 import Data.Bits
+import GHC.Records
 
 
 
@@ -39,6 +41,10 @@ newtype Packed t = Packed { packed :: [t] } deriving (Show, Eq, IsList)
 newtype Variant t = Variant { variant :: t } deriving (Show, Eq, Num, Ord, Real, Enum, Integral, Bits)
 newtype SInt32 = SInt32  { sint32 :: Int32 } deriving (Show, Eq, Num, Ord, Real, Enum, Integral, Bits)
 newtype SInt64 = SInt64  { sint64 :: Int64 } deriving (Show, Eq, Num, Ord, Real, Enum, Integral, Bits)
+
+instance (ProtoData a) => HasField "protoOptDef" (ProtoField (Optional a) n) a where
+    getField (ProtoField (Just a)) = a
+    getField (ProtoField Nothing) = defpd
 
 optionalOrDefault :: ProtoData a => Optional a -> a
 optionalOrDefault = \case
