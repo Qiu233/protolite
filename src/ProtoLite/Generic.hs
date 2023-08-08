@@ -34,7 +34,7 @@ import Data.Bits
 
 
 type Optional = Maybe
-newtype Repeated t = Repeated { repreated :: [t] } deriving (Show, Eq, IsList)
+newtype Repeated t = Repeated { repeated :: [t] } deriving (Show, Eq, IsList)
 newtype Packed t = Packed { packed :: [t] } deriving (Show, Eq, IsList)
 newtype Variant t = Variant { variant :: t } deriving (Show, Eq, Num, Ord, Real, Enum, Integral, Bits)
 newtype SInt32 = SInt32  { sint32 :: Int32 } deriving (Show, Eq, Num, Ord, Real, Enum, Integral, Bits)
