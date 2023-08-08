@@ -40,6 +40,10 @@ newtype Variant t = Variant { variant :: t } deriving (Show, Eq, Num, Ord, Real,
 newtype SInt32 = SInt32  { sint32 :: Int32 } deriving (Show, Eq, Num, Ord, Real, Enum, Integral, Bits)
 newtype SInt64 = SInt64  { sint64 :: Int64 } deriving (Show, Eq, Num, Ord, Real, Enum, Integral, Bits)
 
+optionalOrDefault :: ProtoData a => Optional a -> a
+optionalOrDefault = \case
+    Nothing -> defpd
+    Just a -> a
 
 encode :: ProtoBuf a => a -> B.ByteString
 encode = runPut . pput
