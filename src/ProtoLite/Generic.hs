@@ -13,7 +13,7 @@ module ProtoLite.Generic (
     Optional, Repeated(..), Packed(..), Variant(..), SInt32(..), SInt64(..),
     ProtoField(..), ProtoBuf, encode, decode, optOrDef,
     optJust, optJustV, optNothing, packed, packedV, repeated, repeatedV,
-    optional, packed', packedV', repeated', repeatedV'
+    optional, packed', packedV', repeated', repeatedV', pfield
 ) where
 import GHC.Generics
 import ProtoLite.Types
@@ -64,7 +64,7 @@ optNothing :: ProtoField (Optional a) n
 optNothing = ProtoField Nothing
 
 optional :: ProtoField (Optional a) n -> Maybe a
-optional = protoVal
+optional = pv
 
 packed :: [a] -> ProtoField (Packed a) n
 packed = ProtoField . Packed
@@ -73,10 +73,10 @@ packedV :: [a] -> ProtoField (Packed (Variant a)) n
 packedV = ProtoField . Packed . map Variant
 
 packed' :: ProtoField (Packed a) n -> [a]
-packed' = packedF . protoVal
+packed' = packedF . pv
 
 packedV' :: ProtoField (Packed (Variant a)) n -> [a]
-packedV' = map variantF . packedF . protoVal
+packedV' = map variantF . packedF . pv
 
 repeated :: [a] -> ProtoField (Repeated a) n
 repeated = ProtoField . Repeated
@@ -85,10 +85,13 @@ repeatedV :: [a] -> ProtoField (Repeated (Variant a)) n
 repeatedV = ProtoField . Repeated . map Variant
 
 repeated' :: ProtoField (Repeated a) n -> [a]
-repeated' = repeatedF . protoVal
+repeated' = repeatedF . pv
 
 repeatedV' :: ProtoField (Repeated (Variant a)) n -> [a]
-repeatedV' = map variantF . repeatedF . protoVal
+repeatedV' = map variantF . repeatedF . pv
+
+pfield :: t -> ProtoField t n
+pfield = ProtoField
 
 encode :: ProtoBuf a => a -> B.ByteString
 encode = runPut . pput
@@ -98,7 +101,7 @@ decode bs = do
     let entries = runGet getMessage bs
     pget entries
 
-newtype ProtoField (t :: Type) (n :: Nat) = ProtoField { protoVal :: t }
+newtype ProtoField (t :: Type) (n :: Nat) = ProtoField { pv :: t }
     deriving (Eq, Num, IsString, IsList, Fractional)
 
 class GProtoBuf f where
