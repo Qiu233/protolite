@@ -11,7 +11,7 @@
 {-# LANGUAGE DataKinds #-}
 module ProtoLite.Generic (
     Optional, Repeated(..), Packed(..), Variant(..), SInt32(..), SInt64(..),
-    ProtoField(..), ProtoBuf, encode, decode, optOrDef,
+    ProtoField(..), ProtoBuf, encode, decode, optOrDef, optOrDefV,
     optJust, optJustV, optNothing, packed, packedV, repeated, repeatedV,
     optional, packed', packedV', repeated', repeatedV', pfield
 ) where
@@ -48,11 +48,19 @@ newtype SInt64 = SInt64 Int64 deriving (Show, Eq, Num, Ord, Real, Enum, Integral
 instance (ProtoData a) => HasField "optOrDef" (ProtoField (Optional a) n) a where
     getField (ProtoField (Just a)) = a
     getField (ProtoField Nothing) = defpd
+instance (VariantValue a) => HasField "optOrDefV" (ProtoField (Optional (Variant a)) n) a where
+    getField (ProtoField (Just (Variant a))) = a
+    getField (ProtoField Nothing) = vvdef
 
 optOrDef :: ProtoData a => Optional a -> a
 optOrDef = \case
     Nothing -> defpd
     Just a -> a
+
+optOrDefV :: VariantValue a => Optional (Variant a) -> a
+optOrDefV = \case
+    Nothing -> vvdef
+    Just (Variant a) -> a
 
 optJust :: a -> ProtoField (Optional a) n
 optJust = ProtoField . Just

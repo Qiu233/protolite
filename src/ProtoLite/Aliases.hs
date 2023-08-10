@@ -22,5 +22,6 @@ type SFixed64 = Int64
 type ProtoFieldOptional t = ProtoField (Optional t)
 type ProtoFieldRepeated t = ProtoField (Repeated t)
 type ProtoFieldPacked t = ProtoField (Packed t)
+type ProtoFieldRequired t = ProtoField t
 
 type Bytes = LazyByteString
