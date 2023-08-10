@@ -11,7 +11,7 @@
 {-# LANGUAGE DataKinds #-}
 module ProtoLite.Generic (
     Optional, Repeated(..), Packed(..), Variant(..), SInt32(..), SInt64(..),
-    ProtoField(..), ProtoBuf, encode, decode, optOrDef, optOrDefV,
+    ProtoField(..), ProtoBuf(pdef), encode, decode, optOrDef, optOrDefV,
     optJust, optJustV, optNothing, packed, packedV, repeated, repeatedV,
     optional, packed', packedV', repeated', repeatedV', pfield
 ) where
