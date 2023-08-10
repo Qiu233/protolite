@@ -3,6 +3,7 @@ module ProtoLite.Aliases where
 import ProtoLite.Generic
 import Data.Int
 import Data.Word
+import Data.ByteString.Lazy (LazyByteString)
 
 
 type VInt32 = Variant Int32
@@ -21,3 +22,5 @@ type SFixed64 = Int64
 type ProtoFieldOptional t = ProtoField (Optional t)
 type ProtoFieldRepeated t = ProtoField (Repeated t)
 type ProtoFieldPacked t = ProtoField (Packed t)
+
+type Bytes = LazyByteString
