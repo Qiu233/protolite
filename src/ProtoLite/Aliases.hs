@@ -18,3 +18,6 @@ type Fixed64 = Word64
 type SFixed32 = Int32
 type SFixed64 = Int64
 
+type ProtoFieldOptional t = ProtoField (Optional t)
+type ProtoFieldRepeated t = ProtoField (Repeated t)
+type ProtoFieldPacked t = ProtoField (Packed t)
