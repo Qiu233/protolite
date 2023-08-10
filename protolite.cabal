@@ -27,6 +27,7 @@ source-repository head
 library
   exposed-modules:
       ProtoLite
+      ProtoLite.Aliases
   other-modules:
       ProtoLite.Decode
       ProtoLite.Encode

@@ -18,7 +18,7 @@ category: Data
 # common to point users to the README.md file.
 description:         Please see the README on GitHub at <https://github.com/Qiu233/protolite#readme>
 
-pvp-bounds: both
+# pvp-bounds: both
 
 dependencies:
 - base >= 4.7 && < 5
@@ -41,6 +41,7 @@ library:
   source-dirs: src
   exposed-modules:
     - ProtoLite
+    - ProtoLite.Aliases
 
 tests:
   protolite-test:
