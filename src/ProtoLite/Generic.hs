@@ -11,7 +11,9 @@
 {-# LANGUAGE DataKinds #-}
 module ProtoLite.Generic (
     Optional, Repeated(..), Packed(..), Variant(..), SInt32(..), SInt64(..),
-    ProtoField(..), ProtoBuf, encode, decode, optionalOrDefault
+    ProtoField(..), ProtoBuf, encode, decode, optOrDef,
+    optJust, optJustV, optNothing, packed, packedV, repeated, repeatedV,
+    optional, packed', packedV', repeated', repeatedV'
 ) where
 import GHC.Generics
 import ProtoLite.Types
@@ -32,24 +34,61 @@ import Data.ByteString.Lazy.UTF8 (toString)
 import Data.Binary.Get (runGet, isEmpty, getWord32le, getWord64le, getInt32le, getInt64le, getFloatle, getDoublele)
 import Data.Bits
 import GHC.Records
+import Prelude hiding (repeat)
 
 
 
 type Optional = Maybe
-newtype Repeated t = Repeated { repeated :: [t] } deriving (Show, Eq, IsList)
-newtype Packed t = Packed { packed :: [t] } deriving (Show, Eq, IsList)
-newtype Variant t = Variant { variant :: t } deriving (Show, Eq, Num, Ord, Real, Enum, Integral, Bits)
-newtype SInt32 = SInt32  { sint32 :: Int32 } deriving (Show, Eq, Num, Ord, Real, Enum, Integral, Bits)
-newtype SInt64 = SInt64  { sint64 :: Int64 } deriving (Show, Eq, Num, Ord, Real, Enum, Integral, Bits)
+newtype Repeated t = Repeated { repeatedF :: [t] } deriving (Show, Eq, IsList)
+newtype Packed t = Packed { packedF :: [t] } deriving (Show, Eq, IsList)
+newtype Variant t = Variant { variantF :: t } deriving (Show, Eq, Num, Ord, Real, Enum, Integral, Bits)
+newtype SInt32 = SInt32 Int32 deriving (Show, Eq, Num, Ord, Real, Enum, Integral, Bits)
+newtype SInt64 = SInt64 Int64 deriving (Show, Eq, Num, Ord, Real, Enum, Integral, Bits)
 
-instance (ProtoData a) => HasField "protoOptDef" (ProtoField (Optional a) n) a where
+instance (ProtoData a) => HasField "optOrDef" (ProtoField (Optional a) n) a where
     getField (ProtoField (Just a)) = a
     getField (ProtoField Nothing) = defpd
 
-optionalOrDefault :: ProtoData a => Optional a -> a
-optionalOrDefault = \case
+optOrDef :: ProtoData a => Optional a -> a
+optOrDef = \case
     Nothing -> defpd
     Just a -> a
+
+optJust :: a -> ProtoField (Optional a) n
+optJust = ProtoField . Just
+
+optJustV :: a -> ProtoField (Optional (Variant a)) n
+optJustV = ProtoField . Just . Variant
+
+optNothing :: ProtoField (Optional a) n
+optNothing = ProtoField Nothing
+
+optional :: ProtoField (Optional a) n -> Maybe a
+optional = protoVal
+
+packed :: [a] -> ProtoField (Packed a) n
+packed = ProtoField . Packed
+
+packedV :: [a] -> ProtoField (Packed (Variant a)) n
+packedV = ProtoField . Packed . map Variant
+
+packed' :: ProtoField (Packed a) n -> [a]
+packed' = packedF . protoVal
+
+packedV' :: ProtoField (Packed (Variant a)) n -> [a]
+packedV' = map variantF . packedF . protoVal
+
+repeated :: [a] -> ProtoField (Repeated a) n
+repeated = ProtoField . Repeated
+
+repeatedV :: [a] -> ProtoField (Repeated (Variant a)) n
+repeatedV = ProtoField . Repeated . map Variant
+
+repeated' :: ProtoField (Repeated a) n -> [a]
+repeated' = repeatedF . protoVal
+
+repeatedV' :: ProtoField (Repeated (Variant a)) n -> [a]
+repeatedV' = map variantF . repeatedF . protoVal
 
 encode :: ProtoBuf a => a -> B.ByteString
 encode = runPut . pput

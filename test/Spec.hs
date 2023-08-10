@@ -147,7 +147,7 @@ main = hspec $ do
             print v
             printHex bs
             print v'
-            print $ v.optfu32.protoOptDef
+            print $ v.optfu32.optOrDef
             v' `shouldBe` v
         it "list" $ do
             let v = ProtoListTest {
